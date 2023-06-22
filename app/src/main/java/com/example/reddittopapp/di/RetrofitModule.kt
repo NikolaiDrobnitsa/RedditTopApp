@@ -2,6 +2,7 @@ package com.example.reddittopapp.di
 
 import com.example.reddittopapp.data.remote.PostsApi
 import com.example.reddittopapp.util.Constants.Companion.BASE_URL
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
