@@ -11,7 +11,12 @@ class PostService @Inject constructor(private val postsApi: PostsApi) {
         return withContext(Dispatchers.IO) {
             val response = postsApi.getPosts()
             val redditResponse = response.body()
-            redditResponse?.data?.children?.map { it.data } ?: emptyList()
+            redditResponse?.data?.children?.map { it.data }?.filter { it.url != null && isImageUrl(it.url) }
+                ?: emptyList()
         }
+    }
+
+    private fun isImageUrl(url: String): Boolean {
+        return url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")
     }
 }
