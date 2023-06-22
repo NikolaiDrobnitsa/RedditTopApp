@@ -16,17 +16,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.reddittopapp.domain.item.PostItem
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
-fun HomeScreen(){
-    val homeViewModel = viewModel(modelClass = HomeViewModel::class.java)
+fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
     val posts by homeViewModel.posts.collectAsState()
 
-    LazyColumn {
-        items(posts) { post: PostItem ->
+    LaunchedEffect(Unit) {
+        homeViewModel.getPosts()
+    }
 
+    LazyColumn {
+        items(posts) { post ->
             PostCard(post = post)
         }
     }
