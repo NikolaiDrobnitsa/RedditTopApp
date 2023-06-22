@@ -25,9 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun PostCard(post: PostItem, onImageClick: () -> Unit) {
@@ -41,6 +43,21 @@ fun PostCard(post: PostItem, onImageClick: () -> Unit) {
             .fillMaxSize()
     ) {
         Column {
+            Column(modifier = Modifier.padding(10.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = post.author, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = "•", color = Color.Gray)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "${calculateTimeElapsed(post.created)} hours ago",
+                        color = Color.Gray,
+                        fontStyle = FontStyle.Italic
+                    )
+
+
+                }
+            }
             Image(
                 painter = image,
                 contentDescription = null,
@@ -52,11 +69,17 @@ fun PostCard(post: PostItem, onImageClick: () -> Unit) {
             )
 
             Column(modifier = Modifier.padding(10.dp)) {
-                Text(text = post.author, fontWeight = FontWeight.Bold)
-                Text(text = post.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(text = post.title, overflow = TextOverflow.Ellipsis)
+                Text(text ="\uD83D\uDCAC "+ post.num_comments.toString()+" Comments" , overflow = TextOverflow.Ellipsis)
             }
         }
     }
+}
+fun calculateTimeElapsed(createdAt: Long): String {
+    val currentTimeMillis = System.currentTimeMillis()
+    val elapsedTimeMillis = currentTimeMillis - (createdAt * 1000L)
+    val elapsedHours = TimeUnit.MILLISECONDS.toHours(elapsedTimeMillis)
+    return "$elapsedHours"
 }
 
 @Composable
