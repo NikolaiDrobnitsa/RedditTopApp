@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 
 class PostRepository @Inject constructor(private val postService: PostService) {
-    suspend fun getPosts(): List<PostItem> {
-        return postService.getPosts().map {
+    suspend fun getPosts(limit: Int): List<PostItem> {
+        return postService.getPosts(limit).map {
             it.toPostItem()
         }
     }

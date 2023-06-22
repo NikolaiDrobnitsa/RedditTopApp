@@ -6,7 +6,8 @@ import javax.inject.Inject
 
 
 class GetPostsUseCase @Inject constructor(private val postRepository: PostRepository) {
-    suspend operator fun invoke(): List<PostItem> {
-        return postRepository.getPosts()
+    suspend operator fun invoke(limit: Int): List<PostItem> {
+        val posts = postRepository.getPosts(limit)
+        return posts.filter { it.url != null && it.url.isNotEmpty() }
     }
 }

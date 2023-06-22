@@ -4,10 +4,11 @@ import com.example.reddittopapp.data.remote.model.PostModel
 
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface PostsApi {
     @GET("top.json")
-    suspend fun getPosts(): Response<RedditResponse>
+    suspend fun getPosts(@Query("limit") limit: Int): Response<RedditResponse>
 }
 
 data class RedditResponse(

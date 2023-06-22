@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     public fun getPosts() {
         viewModelScope.launch {
             try {
-                val posts = getPostsUseCase()
+                val posts = getPostsUseCase(100)
                 _posts.value = posts
             } catch (e: Exception) {}
         }

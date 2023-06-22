@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 
 class PostService @Inject constructor(private val postsApi: PostsApi) {
-    suspend fun getPosts(): List<PostModel> {
+    suspend fun getPosts(limit: Int): List<PostModel> {
         return withContext(Dispatchers.IO) {
-            val response = postsApi.getPosts()
+            val response = postsApi.getPosts(limit)
             val redditResponse = response.body()
             redditResponse?.data?.children?.map { it.data }?.filter { it.url != null && isImageUrl(it.url) }
                 ?: emptyList()
