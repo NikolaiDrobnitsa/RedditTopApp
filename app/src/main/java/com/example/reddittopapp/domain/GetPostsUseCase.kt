@@ -6,8 +6,7 @@ import javax.inject.Inject
 
 
 class GetPostsUseCase @Inject constructor(private val postRepository: PostRepository) {
-    suspend operator fun invoke(): List<PostItem>{
+    suspend operator fun invoke(): List<PostItem> {
         return postRepository.getPosts().shuffled()
     }
-
 }

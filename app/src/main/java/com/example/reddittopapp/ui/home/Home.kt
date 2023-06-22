@@ -36,14 +36,13 @@ fun HomeScreen(){
 fun PostCard(post: PostItem){
 
 
-    val image = rememberImagePainter(data = post.thumbnail)
+    val image = rememberImagePainter(data = post.url)
 
     Card(
 
         elevation = 5.dp,
-        shape = RoundedCornerShape(5.dp),
         modifier = Modifier
-            .padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
+            .padding(top = 5.dp, bottom = 5.dp)
             .fillMaxSize()
 
     ) {
