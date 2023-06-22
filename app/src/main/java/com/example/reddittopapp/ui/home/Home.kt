@@ -10,16 +10,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
+import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.reddittopapp.domain.item.PostItem
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -89,7 +86,7 @@ fun HomeScreen() {
 
     val showFullScreenImage = remember { mutableStateOf(false) }
     val selectedImageUrl = remember { mutableStateOf("") }
-
+    val isLoading by homeViewModel.isLoading.collectAsState()
     LazyColumn {
         items(posts) { post: PostItem ->
             PostCard(post = post) {
@@ -97,6 +94,14 @@ fun HomeScreen() {
                 selectedImageUrl.value = post.url ?: ""
                 showFullScreenImage.value = true
             }
+        }
+    }
+    if (isLoading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 

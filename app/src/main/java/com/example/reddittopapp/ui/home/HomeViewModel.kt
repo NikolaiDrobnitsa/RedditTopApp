@@ -18,7 +18,8 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _posts = MutableStateFlow(savedStateHandle.get<List<PostItem>>(STATE_POSTS_KEY) ?: emptyList())
     val posts: StateFlow<List<PostItem>> get() = _posts
-
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> get() = _isLoading
     init {
         if (_posts.value.isEmpty()) {
             getPosts()
@@ -27,10 +28,14 @@ class HomeViewModel @Inject constructor(
 
     public fun getPosts() {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val posts = getPostsUseCase(100)
                 _posts.value = posts
             } catch (e: Exception) {}
+            finally {
+                _isLoading.value = false
+            }
         }
     }
 
