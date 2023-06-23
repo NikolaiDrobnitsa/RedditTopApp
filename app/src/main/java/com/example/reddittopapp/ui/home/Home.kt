@@ -22,10 +22,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.reddittopapp.R
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -36,7 +41,7 @@ fun PostCard(post: PostItem, onImageClick: () -> Unit) {
         elevation = 5.dp,
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
-            .padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
+            .padding(top = 5.dp, bottom = 5.dp)
             .fillMaxSize()
     ) {
         Column {
@@ -58,7 +63,7 @@ fun PostCard(post: PostItem, onImageClick: () -> Unit) {
             Image(
                 painter = image,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
@@ -78,7 +83,6 @@ fun calculateTimeElapsed(createdAt: Long): String {
     val elapsedHours = TimeUnit.MILLISECONDS.toHours(elapsedTimeMillis)
     return "$elapsedHours"
 }
-
 @Composable
 fun HomeScreen() {
     val homeViewModel = viewModel(modelClass = HomeViewModel::class.java)
@@ -87,21 +91,44 @@ fun HomeScreen() {
     val showFullScreenImage = remember { mutableStateOf(false) }
     val selectedImageUrl = remember { mutableStateOf("") }
     val isLoading by homeViewModel.isLoading.collectAsState()
-    LazyColumn {
-        items(posts) { post: PostItem ->
-            PostCard(post = post) {
-                // Handle image click
-                selectedImageUrl.value = post.url ?: ""
-                showFullScreenImage.value = true
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn {
+            item {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(R.drawable.reddit_logo),
+                        contentDescription = "Reddit Logo",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(start = 8.dp)
+                    )
+                    Text(
+                        text = "Reddit Top",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        modifier = Modifier.padding(horizontal = 2.dp,vertical = 16.dp)
+                    )
+                }
+
+            }
+
+            items(posts) { post: PostItem ->
+                PostCard(post = post) {
+                    // Handle image click
+                    selectedImageUrl.value = post.url ?: ""
+                    showFullScreenImage.value = true
+                }
             }
         }
-    }
-    if (isLoading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
+
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 
