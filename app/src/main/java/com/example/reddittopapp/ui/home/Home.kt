@@ -118,7 +118,6 @@ fun HomeScreen() {
 
             items(posts) { post: PostItem ->
                 PostCard(post = post) {
-                    // Handle image click
                     selectedImageUrl.value = post.url ?: ""
                     showFullScreenImage.value = true
                 }
